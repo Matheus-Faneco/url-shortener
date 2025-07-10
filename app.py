@@ -1,33 +1,39 @@
 from flask import Flask, request, render_template, redirect
 from utils import gerar_codigo_url_encurtada
-from redis_client import redis_use, redis_get
+from redis_client import salvar_url_encurtada, buscar_url_original
 
 app = Flask(__name__)
 
-@app.route('/', methods=['POST', 'GET'])
-def shorten():
+@app.route('/', methods=['GET', 'POST'])
+def encurtar_url():
     if request.method == 'POST':
-        long_url = request.form.get('url', '').strip()
+        url_longa = request.form.get('url', '').strip()
 
-        if not long_url:
-            return render_template('index.html', error='Campo de URL vazio')
+        if not url_longa:
+            return render_template('index.html', error='O campo de URL está vazio.')
 
-        if not long_url.startswith(('http://', 'https://')):
-            long_url = 'https://' + long_url
-        #chamando função para gerar codigo da url encurtada
-        short_url = gerar_codigo_url_encurtada()
+        if not url_longa.startswith(('http://', 'https://')):
+            url_longa = 'https://' + url_longa
 
-        redis_use(short_url, long_url, segundos_expiracao=10)
+        # gera código aleatório para a URL encurtada
+        codigo_encurtado = gerar_codigo_url_encurtada()
 
-        return render_template('index.html', short_url=short_url)
+        # salva no Redis com tempo de expiração
+        salvar_url_encurtada(codigo_encurtado, url_longa)
+
+        return render_template('index.html', short_url=codigo_encurtado)
 
     return render_template('index.html')
 
-@app.route('/<short_url>')
-def redirecionar_para_url(short_url):
-    original_url = redis_get(short_url)
-    if original_url is None:
-        return render_template('index.html', error='Link expirado')
-    return redirect(original_url)
+@app.route('/<codigo_encurtado>')
+def redirecionar(codigo_encurtado):
+    # chama a função buscar_url_original
+    url_original = buscar_url_original(codigo_encurtado)
+
+    if url_original is None:
+        return render_template('index.html', error='Link expirado ou inválido.')
+
+    return redirect(url_original)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

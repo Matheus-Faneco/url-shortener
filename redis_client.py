@@ -1,19 +1,19 @@
 import redis
-r = redis.Redis(host='localhost', port=6379, db=0)
+# conectando ao Redis local
+cliente_redis = redis.Redis(host='localhost', port=6379, db=0)
 
-def redis_use(codigo, original_url, segundos_expiracao=10):
-    r.setex(f"short:{codigo}", segundos_expiracao, original_url)  #setex -> set with expire
-    #3 parametros estao sendo passados: name, time, value(codigo, original_url, segundos_expiracao=10)
-    #na teoria, os parametros deveriam estar nesta ordem: codigo, segundos_expiracao=10, original_url
-    #no entanto, o código para de fucionar por algum motivo.
+def salvar_url_encurtada(codigo, url_original, segundos_expiracao=259200):  # 3 dias
+    # salva a URL original no Redis com tempo de expiração
+    cliente_redis.setex(f"encurtada:{codigo}", segundos_expiracao, url_original)  # setex = set with expire
 
-def redis_get(codigo):
-    value = r.get(f"short:{codigo}")
-    if value is None:
+def buscar_url_original(codigo):
+    # busca a URL original a partir do código encurtado
+    valor = cliente_redis.get(f"encurtada:{codigo}")
+    if valor is None:
         return None
-    return value.decode('utf-8')
+    return valor.decode('utf-8')
 
-#teste de conexão
-# print(r.set('foo', 'bar'))
-# print(r.get('foo'))
-# print(r.expire("test", 10))
+# testes manuais (descomente para usar)
+# print(cliente_redis.set('teste', 'valor'))
+# print(cliente_redis.get('teste'))
+# print(cliente_redis.expire('teste', 10))
