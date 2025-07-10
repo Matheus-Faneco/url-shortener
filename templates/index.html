@@ -3,23 +3,97 @@
 <head>
   <meta charset="UTF-8" />
   <title>Encurtador de URL</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f9f9f9;
+    }
+
+    .container {
+      width: 320px;
+      background: white;
+      padding: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    header {
+      background-color: #a2d2ff;
+      padding: 12px 0;
+      margin: -20px -20px 20px -20px;
+      border-radius: 6px 6px 0 0;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #1b262c;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 0;
+      width: 100%;
+      font-size: 1rem;
+      background-color: #329d9c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2a7e7d;
+    }
+
+    p {
+      margin-top: 15px;
+      font-size: 0.95rem;
+    }
+
+    a {
+      color: #329d9c;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+
+  </style>
 </head>
 <body>
+  <div class="container">
+    <header>Encurtador de URL</header>
 
-  <h2>Encurtador de URL</h2>
+    <form method="POST">
+      <input type="text" name="url" placeholder="Digite a URL" required>
+      <button type="submit">Encurtar</button>
+    </form>
 
-  <form method="POST">
-    <input type="text" name="url" placeholder="Digite a URL" required>
-    <button type="submit">Encurtar</button>
-  </form>
+    {% if short_url %}
+      <p>URL encurtada: <a href="/{{ short_url }}">/{{ short_url }}</a></p>
+    {% endif %}
 
-  {% if short_url %}
-    <p>URL encurtada: <a href="/{{ short_url }}">/{{ short_url }}</a></p>
-  {% endif %}
-
-  {% if error %}
-    <p style="color: red;">{{ error }}</p>
-  {% endif %}
-
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+  </div>
 </body>
 </html>
