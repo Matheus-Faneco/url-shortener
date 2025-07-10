@@ -30,7 +30,7 @@ python app.py
 Acesse:
 http://localhost:5000
 
-Estrutura
+## Estrutura:
 app.py: rotas e lógica principal
 
 redis_client.py: conexão e funções Redis
