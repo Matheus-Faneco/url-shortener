@@ -2,7 +2,7 @@ import redis
 import os
 r = redis.Redis(host='localhost', port=6379, db=0)
 
-def redis_use(code, original_url, expire_seconds=5):
+def redis_use(code, original_url, expire_seconds=10):
     r.setex(f"short:{code}", expire_seconds, original_url)
 
 def redis_get(code):

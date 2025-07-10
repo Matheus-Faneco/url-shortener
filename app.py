@@ -17,7 +17,7 @@ def shorten():
         #chamando função para gerar codigo da url
         short_url = generate_code()
 
-        redis_use(short_url, long_url, expire_seconds=5)
+        redis_use(short_url, long_url, expire_seconds=10)
 
         return render_template('index.html', short_url=short_url)
 
