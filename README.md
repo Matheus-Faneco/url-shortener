@@ -38,3 +38,12 @@ redis_client.py: conexão e funções Redis
 utils.py: geração dos códigos aleatórios
 
 templates/index.html: interface simples
+
+## Referências
+
+- [How to Build a URL Shortener with Go (Dev.to)](https://dev.to/envitab/how-to-build-a-url-shortener-with-go-5hn5)  
+- [Python Tutorial: How to Create a URL Shortener with Flask (TheLinuxCode)](https://thelinuxcode.com/python-tutorial-how-to-create-a-url-shortener-with-flask/)  
+- [Redis Python Client (redis-py) - PyPI](https://pypi.org/project/redis/)
+- [Redis Python Examples (Official docs](https://redis.readthedocs.io/en/stable/examples.html)
+
+
